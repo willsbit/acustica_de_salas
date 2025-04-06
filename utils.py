@@ -31,16 +31,10 @@ def delany_bazley(
       A tuple with two elements, the first one being a vector of specific impedances and
       the second a vector of wave numbers. These vectors will have the same length as `f`.
     """
+    # fmt: off
     # Characteristic impedance
-    Zc = (rho0 * c0) * (
-        (1 + (9.08 * ((1e3 * (f / sigma)) ** (-0.75))))
-        - (1j * 11.9 * ((1e3 * (f / sigma)) ** (-0.73)))
-    )  
-    
+    Zc = (rho0 * c0)*(1 + 9.08*(((1e3*f)/sigma)**(-0.75)) - 1j *11.9*(((1e3*f) / sigma)**(-0.73)))
     # Characteristic wave number
-    kc = ((2 * pi * f) / c0) * (
-        (10.3 * ((1e3 * (f / sigma)) ** (-0.59)))
-        + (1j * (1 + (10.8 * ((1e3 * (f / sigma)) ** (-0.7)))))
-    )  
-
+    kc = ((2 * pi * f) / c0) * (1 + 10.8*(((1e3*f)/sigma)**(-0.70)) - 1j*10.3*(((1e3*f)/sigma)**(-0.59)))
+    # fmt: on
     return (Zc, kc)
