@@ -93,16 +93,3 @@ def jca(
     kc = omega * np.sqrt(rho_c / K)
 
     return (Zc, kc)
-
-
-## testing functions
-# d = 0.025
-# sigma = 25e3
-# porosity = 0.96,
-# tortuosity = 1.1
-# viscous_length = 1e-4
-
-# Zc, kc = jca(f, sigma, tortuosity, porosity, viscous_length) # jca parameters
-# Zs = -1j * (Zc / np.tan(kc * d))  # surface impedance
-# Vp = (Zs - (rho0 * c0)) / (Zs + (rho0 * c0))  # reflection coefficient
-# alpha = 1 - (abs(Vp)) ** 2  # absorption coefficient
