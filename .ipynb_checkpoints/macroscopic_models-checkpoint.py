@@ -39,9 +39,9 @@ def delany_bazley(
 
     """
     # fmt: off
-    # Characteristic impedance
+    # characteristic impedance
     Zc = (rho0 * c0)*(1 + 9.08*(((1e3*f)/sigma)**(-0.75)) - 1j *11.9*(((1e3*f) / sigma)**(-0.73)))
-    # Characteristic wave number
+    # characteristic wave number
     kc = ((2 * np.pi * f) / c0) * (1 + 10.8*(((1e3*f)/sigma)**(-0.70)) - 1j*10.3*(((1e3*f)/sigma)**(-0.59)))
     # fmt: on
     return (Zc, kc)
@@ -99,7 +99,10 @@ def jca(
     K = gamma*P0 / (gamma - ((gamma - 1) / (1 + (((sigma*porosity) / (1j*tortuosity*rho0*prandtl*omega)) * denominator_sqrt))))
     # fmt: on
 
+    # characteristic impedance
     Zc = np.sqrt(K * rho_c)
+
+    # characteristic wave number
     kc = omega * np.sqrt(rho_c / K)
 
     return (Zc, kc)
