@@ -9,6 +9,7 @@ in this module.
 
 Typical usage example:
   Zc, kc = delany_basley(frequency_vector, sigma=4000, c0=343, rho0=1.21)
+  Zc, kc = jca(frequency_vector, sigma=4000, tortuosity=1.1, porosity=0.95, viscous_characteristic_length=1e-4)
 """
 
 
@@ -31,11 +32,16 @@ def delany_bazley(
     Returns:
       A tuple with two elements, the first one being a vector of specific impedances and
       the second a vector of wave numbers. These vectors will have the same length as `f`.
+
+
+    References:
+      [1] E. Brandão, Acústica de salas: Projeto e modelagem. São Paulo: Editora Edgard Blucher, 2016.
+
     """
     # fmt: off
-    # Characteristic impedance
+    # characteristic impedance
     Zc = (rho0 * c0)*(1 + 9.08*(((1e3*f)/sigma)**(-0.75)) - 1j *11.9*(((1e3*f) / sigma)**(-0.73)))
-    # Characteristic wave number
+    # characteristic wave number
     kc = ((2 * np.pi * f) / c0) * (1 + 10.8*(((1e3*f)/sigma)**(-0.70)) - 1j*10.3*(((1e3*f)/sigma)**(-0.59)))
     # fmt: on
     return (Zc, kc)
@@ -51,7 +57,7 @@ def jca(
     gamma: float = 1.4,
     air_viscosity: float = 1.84e-5,
     prandtl: float = 0.77,
-    P0: float = 101325
+    P0: float = 101325,
 ) -> Tuple[List[float], List[float]]:
     """Calulates the characteristic impedance and characteristic wave number of a material using the Johnson-Champoux-Allard model.
 
@@ -79,29 +85,24 @@ def jca(
     Returns:
       A tuple with two elements, the first one being a vector of specific impedances and
       the second a vector of wave numbers. These vectors will have the same length as `f`.
+
+    References:
+      [1] E. Brandão, Acústica de salas: Projeto e modelagem. São Paulo: Editora Edgard Blucher, 2016.
+
     """
-    omega = 2*np.pi*f
-    #fmt: off
+    omega = 2 * np.pi * f
+    # fmt: off
     brackets_sqrt = np.sqrt(1 + ((4j*(tortuosity**2)*air_viscosity*rho0*omega) / ((sigma**2)*(viscous_characteristic_length**2)*(porosity**2))))
-    rho_c = (rho*tortuosity) * (1 + (((sigma*porosity) / (1j*tortuosity*rho0*omega)) * brackets_sqrt))
+    rho_c = (rho0*tortuosity) * (1 + (((sigma*porosity) / (1j*tortuosity*rho0*omega)) * brackets_sqrt))
 
     denominator_sqrt = np.sqrt(1 + ((4j*(tortuosity**2)*air_viscosity*rho0*prandtl*omega) / ((sigma**2)*(viscous_characteristic_length**2)*(porosity**2))))
-    K = gamma*P0 / (gamma - ((gamma - 1) / (1 + (((sigma*porosity) / (1j*tortuosity*rho0*prandtl*omega)) * denominator_root))))
-    #fmt: on
+    K = gamma*P0 / (gamma - ((gamma - 1) / (1 + (((sigma*porosity) / (1j*tortuosity*rho0*prandtl*omega)) * denominator_sqrt))))
+    # fmt: on
 
-    Zc = np.sqrt(K*rho_c)
+    # characteristic impedance
+    Zc = np.sqrt(K * rho_c)
+
+    # characteristic wave number
     kc = omega * np.sqrt(rho_c / K)
 
     return (Zc, kc)
-
-## testing functions
-# d = 0.025
-# sigma = 25e3
-# porosity = 0.96,
-# tortuosity = 1.1
-# viscous_length = 1e-4
-
-# Zc, kc = jca(f, sigma, tortuosity, porosity, viscous_length) # jca parameters
-# Zs = -1j * (Zc / np.tan(kc * d))  # surface impedance
-# Vp = (Zs - (rho0 * c0)) / (Zs + (rho0 * c0))  # reflection coefficient
-# alpha = 1 - (abs(Vp)) ** 2  # absorption coefficient

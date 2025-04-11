@@ -9,6 +9,7 @@ in this module.
 
 Typical usage example:
   Zc, kc = delany_basley(frequency_vector, sigma=4000, c0=343, rho0=1.21)
+  Zc, kc = jca(frequency_vector, sigma=4000, tortuosity=1.1, porosity=0.95, viscous_characteristic_length=1e-4)
 """
 
 
@@ -31,6 +32,11 @@ def delany_bazley(
     Returns:
       A tuple with two elements, the first one being a vector of specific impedances and
       the second a vector of wave numbers. These vectors will have the same length as `f`.
+
+
+    References:
+      [1] E. Brandão, Acústica de salas: Projeto e modelagem. São Paulo: Editora Edgard Blucher, 2016.
+
     """
     # fmt: off
     # Characteristic impedance
@@ -79,6 +85,10 @@ def jca(
     Returns:
       A tuple with two elements, the first one being a vector of specific impedances and
       the second a vector of wave numbers. These vectors will have the same length as `f`.
+
+    References:
+      [1] E. Brandão, Acústica de salas: Projeto e modelagem. São Paulo: Editora Edgard Blucher, 2016.
+
     """
     omega = 2 * np.pi * f
     # fmt: off
