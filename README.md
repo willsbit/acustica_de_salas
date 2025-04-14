@@ -1,11 +1,11 @@
-# Room Acoustics (EAC1034)
+# Room Acoustics (EAC1050)
 Undergraduate course at UFSM lectured by Dr. Eric Brandão.
 
 ## Sound absorption
 Supported models:   
 - Delany-Bazley and JCA models for porous absorbers;
 - Membrane absorbers with a layer of porous material;
-- Perforated panel absorbers.
+- Perforated, slotted, microperforated and double leaf microperforated panel absorbers.
 
 ## Installation
 
